@@ -1,0 +1,60 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * BigCommerce + Remita adapter configuration.
+ *
+ * Copy this file to config.php and fill in your values.
+ *   cp config.php.example config.php
+ *
+ * NEVER commit config.php to version control.
+ *
+ * All values can also be supplied via environment variables — the fallback
+ * chain below prefers env vars so the same codebase works in serverless /
+ * container environments without a config.php on disk.
+ */
+return [
+
+    // -------------------------------------------------------------------------
+    // BigCommerce OAuth App credentials
+    // (obtained from https://developer.bigcommerce.com/ after creating an app)
+    // -------------------------------------------------------------------------
+    'bigcommerce_client_id'     => getenv('BIGCOMMERCE_CLIENT_ID')     ?: 'your-bc-client-id',
+    'bigcommerce_client_secret' => getenv('BIGCOMMERCE_CLIENT_SECRET') ?: 'your-bc-client-secret',
+
+    // Full URL BigCommerce calls after the merchant clicks Install.
+    // Must match exactly what is registered in the Dev Portal.
+    'bigcommerce_redirect_uri'  => getenv('BIGCOMMERCE_REDIRECT_URI')  ?: 'https://your-domain.com/auth/install.php',
+
+    // Permanent store access token (single-store deployment).
+    // For multi-store, this is loaded per-request from data/stores/{storeHash}.json.
+    'bigcommerce_access_token'  => getenv('BIGCOMMERCE_ACCESS_TOKEN')  ?: 'your-bc-access-token',
+
+    // -------------------------------------------------------------------------
+    // Remita gateway credentials
+    // -------------------------------------------------------------------------
+    'remita_base_url'   => getenv('REMITA_BASE_URL')   ?: 'https://remitademo.net',
+    'remita_secret_key' => getenv('REMITA_SECRET_KEY') ?: 'your-remita-secret-key',
+
+    // HMAC-SHA256 secret used to verify Remita webhook signatures.
+    // Set this in your Remita dashboard when registering the webhook URL.
+    'remita_webhook_secret' => getenv('REMITA_WEBHOOK_SECRET') ?: 'your-webhook-hmac-secret',
+
+    // -------------------------------------------------------------------------
+    // Application URLs
+    // -------------------------------------------------------------------------
+    // Base URL of this adapter application (no trailing slash).
+    'app_url' => getenv('APP_URL') ?: 'https://your-domain.com',
+
+    // -------------------------------------------------------------------------
+    // File-based storage paths (must be writable by the web server, outside web root)
+    // -------------------------------------------------------------------------
+    // Root data directory. Subdirectories created automatically:
+    //   data/idempotency/   — idempotency records
+    //   data/stores/        — per-store OAuth credentials (install.php)
+    'data_dir' => getenv('DATA_DIR') ?: __DIR__ . '/data',
+
+    // Directory for application log files.
+    'log_dir'  => getenv('LOG_DIR')  ?: __DIR__ . '/data/logs',
+
+];
